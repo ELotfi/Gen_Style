@@ -47,6 +47,7 @@ def train_test(args, lang, folds):
 			print(lang +' model, Fold %d of %d, Epoch: %d of %d' %(n+1, args.folds, epoch+1, args.epoch))
 			for i,batch in enumerate(tqdm(train_loader)):
 				loss = genstylemodel.training_step(batch,i)
+				loss /= args.accumulate_grad_batches
 				loss.backward()
 				if (i+1)%args.accumulate_grad_batches==0:
 					torch.nn.utils.clip_grad_norm_(model.parameters(), args.max_grad_norm)
